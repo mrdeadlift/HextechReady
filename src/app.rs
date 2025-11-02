@@ -180,16 +180,20 @@ impl LolAutoAcceptApp {
                 score,
                 image_coords,
                 screen_coords,
+                template_size,
+                scale,
             } => {
                 self.last_detection = Some(DetectionSnapshot {
                     timestamp: Instant::now(),
                     score,
                     image_coords,
                     screen_coords,
+                    template_size,
+                    scale,
                 });
                 self.status_line = format!(
-                    "Detected @ ({}, {}) score {:.3}",
-                    screen_coords.0, screen_coords.1, score
+                    "Detected @ ({}, {}) score {:.3} scale {:.2}",
+                    screen_coords.0, screen_coords.1, score, scale
                 );
             }
             WorkerEvent::Clicked { screen_coords } => {
@@ -301,12 +305,15 @@ impl LolAutoAcceptApp {
         ui.label(RichText::new(&self.status_line).strong());
         if let Some(snapshot) = &self.last_detection {
             ui.label(format!(
-                "Last detection: {:.3} score at screen ({}, {}) – image ({}, {}) – {} ago",
+                "Last detection: {:.3} score at screen ({}, {}) – image ({}, {}) – template {}x{} (scale {:.2}) – {} ago",
                 snapshot.score,
                 snapshot.screen_coords.0,
                 snapshot.screen_coords.1,
                 snapshot.image_coords.0,
                 snapshot.image_coords.1,
+                snapshot.template_size.0,
+                snapshot.template_size.1,
+                snapshot.scale,
                 format_duration(snapshot.timestamp.elapsed())
             ));
         } else {
@@ -479,6 +486,8 @@ struct DetectionSnapshot {
     score: f32,
     image_coords: (u32, u32),
     screen_coords: (i32, i32),
+    template_size: (u32, u32),
+    scale: f32,
 }
 
 enum WorkerEvent {
@@ -486,6 +495,8 @@ enum WorkerEvent {
         score: f32,
         image_coords: (u32, u32),
         screen_coords: (i32, i32),
+        template_size: (u32, u32),
+        scale: f32,
     },
     Clicked {
         screen_coords: (i32, i32),
@@ -577,8 +588,8 @@ fn handle_frame(
             }
         }
 
-        let template_half_w = (template.width() / 2) as i32;
-        let template_half_h = (template.height() / 2) as i32;
+        let template_half_w = (result.template_size.0 as i32) / 2;
+        let template_half_h = (result.template_size.1 as i32) / 2;
 
         let screen_x =
             frame.origin.0 + result.position.0 as i32 + template_half_w + config.click_offset_x;
@@ -589,6 +600,8 @@ fn handle_frame(
             score: result.score,
             image_coords: result.position,
             screen_coords: (screen_x, screen_y),
+            template_size: result.template_size,
+            scale: result.scale,
         });
 
         if let Err(err) = input::click_at(screen_x, screen_y) {
@@ -599,7 +612,12 @@ fn handle_frame(
 
         info!(
             score = result.score,
-            screen_x, screen_y, "accept button clicked"
+            scale = result.scale,
+            template_width = result.template_size.0,
+            template_height = result.template_size.1,
+            screen_x,
+            screen_y,
+            "accept button clicked"
         );
         let _ = events_tx.send(WorkerEvent::Clicked {
             screen_coords: (screen_x, screen_y),

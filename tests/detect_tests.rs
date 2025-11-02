@@ -29,6 +29,23 @@ fn positive_sample_has_high_score() {
         "expected high score, got {:.4}",
         detection.score
     );
+    assert!(
+        detection.template_size.0 <= sample.width(),
+        "template width {} should fit sample width {}",
+        detection.template_size.0,
+        sample.width()
+    );
+    assert!(
+        detection.template_size.1 <= sample.height(),
+        "template height {} should fit sample height {}",
+        detection.template_size.1,
+        sample.height()
+    );
+    assert!(
+        detection.scale > 0.0,
+        "scale should be positive, got {:.4}",
+        detection.scale
+    );
 }
 
 #[test]
