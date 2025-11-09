@@ -25,15 +25,15 @@ This document captures the architectural decisions and technical details for the
 
 ## 2. Module Responsibilities
 
-| Module | Responsibility |
-| --- | --- |
-| `app.rs` | egui widgets, state management, worker orchestration, handling events/logs |
-| `capture.rs` | Monitor enumeration (via `display-info`) and RGBA → grayscale capture |
-| `detect.rs` | Template loading + normalized cross correlation (via `imageproc`) |
-| `input.rs` | Cross-platform mouse click helper (`enigo`) |
-| `config.rs` | `confy`-backed persistence, default values, template resolution |
-| `logpipe.rs` | `tracing` subscriber that feeds the GUI log panel |
-| `tests/detect_tests.rs` | Regression checks using bundled mock assets |
+| Module                  | Responsibility                                                             |
+| ----------------------- | -------------------------------------------------------------------------- |
+| `app.rs`                | egui widgets, state management, worker orchestration, handling events/logs |
+| `capture.rs`            | Monitor enumeration (via `display-info`) and RGBA → grayscale capture      |
+| `detect.rs`             | Template loading + normalized cross correlation (via `imageproc`)          |
+| `input.rs`              | Cross-platform mouse click helper (`enigo`)                                |
+| `config.rs`             | `confy`-backed persistence, default values, template resolution            |
+| `logpipe.rs`            | `tracing` subscriber that feeds the GUI log panel                          |
+| `tests/detect_tests.rs` | Regression checks using bundled mock assets                                |
 
 ## 3. Worker Loop
 
@@ -135,7 +135,7 @@ Keep this document up to date as new modules land or architectural assumptions c
 
 # 開発メモ（日本語版）
 
-このドキュメントでは、「LoL Auto Accept」のRustによるリライトに関するアーキテクチャの判断と技術的な詳細をまとめています。
+このドキュメントでは、「LoL Auto Accept」の Rust によるリライトに関するアーキテクチャの判断と技術的な詳細をまとめています。
 
 ## 1. アーキテクチャ概要
 
@@ -160,15 +160,15 @@ Keep this document up to date as new modules land or architectural assumptions c
 
 ## 2. モジュールごとの責務
 
-| モジュール | 役割 |
-| --- | --- |
-| `app.rs` | egui ウィジェット、状態管理、ワーカーの制御、イベント/ログ処理 |
-| `capture.rs` | モニタ列挙（`display-info`）と RGBA→グレースケールキャプチャ |
-| `detect.rs` | テンプレート読み込みと正規化相互相関（`imageproc`） |
-| `input.rs` | クロスプラットフォームなマウスクリックヘルパー（`enigo`） |
-| `config.rs` | `confy` バックエンドの永続化、デフォルト設定、テンプレート探索 |
-| `logpipe.rs` | GUI ログパネルへ流す `tracing` サブスクライバー |
-| `tests/detect_tests.rs` | 同梱モックアセットを用いたリグレッションテスト |
+| モジュール              | 役割                                                           |
+| ----------------------- | -------------------------------------------------------------- |
+| `app.rs`                | egui ウィジェット、状態管理、ワーカーの制御、イベント/ログ処理 |
+| `capture.rs`            | モニタ列挙（`display-info`）と RGBA→ グレースケールキャプチャ  |
+| `detect.rs`             | テンプレート読み込みと正規化相互相関（`imageproc`）            |
+| `input.rs`              | クロスプラットフォームなマウスクリックヘルパー（`enigo`）      |
+| `config.rs`             | `confy` バックエンドの永続化、デフォルト設定、テンプレート探索 |
+| `logpipe.rs`            | GUI ログパネルへ流す `tracing` サブスクライバー                |
+| `tests/detect_tests.rs` | 同梱モックアセットを用いたリグレッションテスト                 |
 
 ## 3. ワーカーループ
 
